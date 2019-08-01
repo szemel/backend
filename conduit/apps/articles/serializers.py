@@ -32,7 +32,7 @@ class CreateCommentSerializer(serializers.ModelSerializer):
 
 
 class ArticleSerializer(serializers.ModelSerializer):
-    author = serializers.CharField(source='author.username')
+    author = serializers.CharField(source='author.username',read_only=True)
     description = serializers.CharField(required=False)
     createdAt = serializers.SerializerMethodField(method_name='get_created_at')
     comments = CommentSerializer(many=True, read_only=True)
