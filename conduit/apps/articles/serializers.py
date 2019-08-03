@@ -32,7 +32,7 @@ class CreateCommentSerializer(serializers.ModelSerializer):
 
 
 class ArticleSerializer(serializers.ModelSerializer):
-    author = serializers.CharField(source='author.username',read_only=True)
+    author = serializers.CharField(source='author.username', read_only=True)
     description = serializers.CharField(required=False)
     createdAt = serializers.SerializerMethodField(method_name='get_created_at')
     comments = CommentSerializer(many=True, read_only=True)
@@ -53,4 +53,7 @@ class ArticleSerializer(serializers.ModelSerializer):
     def get_created_at(self, instance):
         return instance.created_at.isoformat()
 
-
+    def create(self, validated_data):
+        validated_data['author'] = self.context['request'].user
+        instance = super().create(validated_data)
+        return instance
